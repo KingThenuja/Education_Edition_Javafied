@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_16_sulfur": {
+      "conditions": {
+        "items": [
+          {
+            "items": "educationeditionjavafied:16_sulfur"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_56_barium": {
+      "conditions": {
+        "items": [
+          {
+            "items": "educationeditionjavafied:56_barium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_8_oxygen": {
+      "conditions": {
+        "items": [
+          {
+            "items": "educationeditionjavafied:8_oxygen"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "educationeditionjavafied:barium_sulfate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_56_barium",
+      "has_16_sulfur",
+      "has_8_oxygen"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "educationeditionjavafied:barium_sulfate"
+    ]
+  }
+}

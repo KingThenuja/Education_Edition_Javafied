@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_13_aluminum": {
+      "conditions": {
+        "items": [
+          {
+            "items": "educationeditionjavafied:13_aluminum"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_8_oxygen": {
+      "conditions": {
+        "items": [
+          {
+            "items": "educationeditionjavafied:8_oxygen"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "educationeditionjavafied:aluminum_oxide"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_13_aluminum",
+      "has_8_oxygen"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "educationeditionjavafied:aluminum_oxide"
+    ]
+  }
+}

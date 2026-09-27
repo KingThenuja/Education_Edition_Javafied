@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "salted_food_items",
+  "ingredients": [
+    "educationeditionjavafied:salt",
+    "minecraft:baked_potato"
+  ],
+  "result": {
+    "id": "educationeditionjavafied:salted_baked_potato"
+  }
+}

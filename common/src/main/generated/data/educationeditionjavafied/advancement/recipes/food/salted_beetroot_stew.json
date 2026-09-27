@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_beetroot_soup": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:beetroot_soup"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_salt": {
+      "conditions": {
+        "items": [
+          {
+            "items": "educationeditionjavafied:salt"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "educationeditionjavafied:salted_beetroot_stew"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_salt",
+      "has_beetroot_soup"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "educationeditionjavafied:salted_beetroot_stew"
+    ]
+  }
+}

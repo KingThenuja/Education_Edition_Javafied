@@ -1,0 +1,111 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev'
+    id "com.modrinth.minotaur"
+    id "net.darkhax.curseforgegradle"
+}
+def modrinthToken = System.getenv("MODRINTH_TOKEN")
+def cfToken = System.getenv("CURSEFORGE_TOKEN")
+
+tasks.withType(ProcessResources).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+
+modrinth {
+    token = modrinthToken
+    projectId = property("modrinth_project_id").toString()
+    versionNumber = version.toString()
+    versionType = property("versionType").toString()
+    uploadFile = tasks.findByName("remapJar") ?: tasks.named("jar")
+    gameVersions = [property("minecraft_version").toString()]
+    loaders = ["neoforge"]
+    changelog = rootProject.file("CHANGELOG.md").text
+
+}
+tasks.named('sourcesJar', Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    apiToken = cfToken
+    def projectId = ("${curseforge_project_id}").toLong()
+    def mainFile = upload(projectId, tasks.findByName("remapJar") ?: tasks.named("jar"))
+    mainFile.displayName = "Redden's Stone Lanterns Reconstructed v${version}"
+    mainFile.releaseType = "${versionType}"
+    mainFile.changelogType = "markdown"
+    mainFile.changelog = rootProject.file("CHANGELOG.md").text
+    mainFile.addGameVersion("${minecraft_version}")
+    mainFile.addModLoader("NeoForge")
+    mainFile.addEnvironment("Server")
+    mainFile.addEnvironment("Client")
+}
+
+tasks.named('publishCurseForge').configure {
+    dependsOn tasks.findByName("remapJar") ?: tasks.named("jar")
+}
+neoForge {
+    version = neoforge_version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
+        client {
+            client()
+            gameDirectory = this.mkdir(this.file('runs/client'))
+        }
+        server {
+            server()
+            this.file('runs/server').createParentDirectories()
+            gameDirectory = this.mkdir(this.file('runs/server'))
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+dependencies {
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+}
+sourceSets {
+    main {
+        resources {
+            srcDirs += project(':common').file('src/main/generated')
+        }
+    }
+}
+repositories {
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    maven { url "https://maven.shedaniel.me" }
+}
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named(variant) {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
+}
+

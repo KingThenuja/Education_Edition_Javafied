@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "salted_food_items",
+  "ingredients": [
+    "educationeditionjavafied:salt",
+    "minecraft:cooked_mutton"
+  ],
+  "result": {
+    "id": "educationeditionjavafied:salted_cooked_mutton"
+  }
+}
